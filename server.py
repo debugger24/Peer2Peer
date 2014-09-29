@@ -18,7 +18,7 @@ class handlers(threading.Thread):
             file_to_fetch = self.client.recv(BUFFER)
             path_to_file = './Files/'+file_to_fetch
             os.path.isfile(path_to_file)
-            fh = open(path_to_file,'wb')
+            fh = open(path_to_file,'rb')
             binary_data = fh.read()
             self.client.sendall(binary_data)
             return 'File Sent.!!'
@@ -30,7 +30,7 @@ class handlers(threading.Thread):
 
     def response_handler(self,data):
         try:
-            self.client.send(data)
+            self.client.sendall(data)
         except Exception as e:
             self.client.send('Unable to send the data, Check the connection.!')
             self.client.close()
@@ -42,11 +42,9 @@ class handlers(threading.Thread):
 
         try:
             client_data = self.request_handler()
-            if client_data:
-                self.client.response_handler(client_data)
+
         finally:
-            pass        
-            #self.client.close()      
+            self.client.close()      
             
 class server_class(threading.Thread):
     def __init__(self,port):
@@ -57,9 +55,6 @@ class server_class(threading.Thread):
          
     def process_data(self):
         client_connection = None                
-        print '*'*80
-        print 'Server is now running on port %d' % self.PORT
-        print '*'*80
 
         while True:
             try:
