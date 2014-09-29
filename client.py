@@ -5,26 +5,33 @@ from datetime import datetime
 import threading
 SERVER_HOST = 'localhost'
 SERVER_PORT = 3000
-BUFFER = 1024
-SEND_TIMES = []
-RECEIVE_TIMES = []
+BUFFER = 65536
 
-class client(threading.Thread):
-    def __init__(self):
-        super(client,self).__init__()
+class client_class(threading.Thread):
+    def __init__(self,credentials,file_name):
+        super(client_class,self).__init__()
         self.client = None
-        self.server_addr = (SERVER_HOST,SERVER_PORT)
-        # The packet size is varied depending on the user selection
-        # Current sizes are 1B, 1KB and 64KB
-        self.packet = ['A','A'*1024,'A'*1024*64]
+        # This is a tuple (Host_name,Port_addr)
+        self.credentials = credentials 
+        self.file_name = file_name
+        self.output_path = './Test/'
+        self.file_size = None
+
+    def write_handler(self,data):
+        write_path = self.output_path + self.file_name 
+        fh = open(write_path,'wb')
+        fh.write(data)
+        fh.close()   
     
-    def send_data(self,data):
+    def response_handler(self):
         try:
             start_packet_time = datetime.now() 
-            self.client.send(data)
+            raw_data = self.client.recv(BUFFER)
             stop_packet_time = datetime.now()
+            write_handler(raw_data)
+
         except Exception as e:
-            print 'Could not send the data.!!'
+            print 'Error in receiving or writing data.!!'
             print e.message
             print '*'*80
             self.client.close()
@@ -32,11 +39,12 @@ class client(threading.Thread):
                 
         return (stop_packet_time - start_packet_time)
     
-    def receive_data(self):
+    def request_handler(self):
         try:
             start_packet_time = datetime.now()
-            data = self.client.recv(BUFFER)  
+            data = self.client.send(self.file_name)  
             stop_packet_time = datetime.now()
+
         except Exception as e:
             print 'Could not receive the data'
             print e.message
@@ -44,17 +52,15 @@ class client(threading.Thread):
             self.client.close()
             return
                 
-        return (data,(stop_packet_time - start_packet_time))  
+        return (stop_packet_time - start_packet_time)
             
-    def process_data(self,data,packet_size):
+    def connect_to_peer(self):
         try:
             self.client = socket.socket(socket.AF_INET,socket.SOCK_STREAM)
             self.client.setsockopt(socket.SOL_SOCKET, socket.SO_REUSEADDR, 1)
-            self.client.connect(self.server_addr)
-            send_time = self.send_data(data)
-            receive_time = self.receive_data()
-            SEND_TIMES.append(send_time)
-            RECEIVE_TIMES.append(receive_time)
+            self.client.connect(self.credentials)
+            request_time = self.request_handler()
+            response_time = self.response_handler()
 
         except Exception as e:
             print 'Cannot connect to the server..!!'
@@ -65,18 +71,17 @@ class client(threading.Thread):
                
         finally:
             self.client.close()
+
         print 'Message from the server:', receive_time[0]
-        print 'The time taken to send data:',send_time
-        print 'The time taken to receive data:',receive_time[1]
-        print 'Packet Size transmitted:',packet_size
-        print 'Send Time in microseconds:',send_time.microseconds
-        print 'The Bandwidth for the application is %d MBytes/Sec' % (((packet_size/send_time.microseconds)*(pow(10,6)))/(1024 * 1024))
+        print 'The time taken to receive file:',response_time
+        print 'Size of the file transmitted:',self.file_size
         print '*'*80
 
     def run(self):
-        possibilities = [1,2,3]
+        #possibilities = [1,2,3]
         print '*'*80
         try:
+            '''
             while 1:
                 print '\nEnter the packet size:'
                 print 'Enter 1 for 1B'
@@ -87,7 +92,10 @@ class client(threading.Thread):
                     print 'Invalid input.!!'
                 else:
                     break    
-            data_to_send = self.packet[possibilities.index(int(option))]  
+            '''
+            fh = open('./Test/PA1.pdf','rb')        
+            data_to_send = fh.read() 
+            fh.close()
             print '\nNumber of bytes to send:', len(data_to_send)  
             self.process_data(data_to_send,len(data_to_send))
 
@@ -97,6 +105,6 @@ class client(threading.Thread):
             sys.exit(1)    
 
 if __name__ == '__main__':
-    cli = client()
+    cli = client_class()
     cli.start()
     cli.join() 
