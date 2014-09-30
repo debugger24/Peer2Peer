@@ -10,9 +10,9 @@ HOSTNAME = 'localhost'
 PORT = 3000             # Random port 
 BUFFER = 65536
                 
-class central_server_class(threading.Thread):
+class central_server_class():
     def __init__(self):
-        super(central_server_class,self).__init__()
+        #super(central_server_class,self).__init__()
         self.server = None
         self.threads_ = []
         self.file_index = {}
@@ -74,13 +74,20 @@ class central_server_class(threading.Thread):
     def list_all_files(self):
         return json.dumps(self.file_index)
 
+    def destroy_peer(self,peer):
+        for i,v in self.file_index.items():
+            if unicode(peer) in v:
+                v.pop(v.index(unicode(peer)))
+
     def process_request(self):
         client_connection = None                
         print '*'*80
         print 'Server is now running on port %d' % PORT
+        print 'Press cntrl+c to shutdown server.!!'
         print '*'*80
+        infinite = 1
 
-        while 1:
+        while infinite:
             try:
                 self.server = socket.socket(socket.AF_INET,socket.SOCK_STREAM)
                 self.server.setsockopt(socket.SOL_SOCKET, socket.SO_REUSEADDR, 1)
@@ -104,10 +111,14 @@ class central_server_class(threading.Thread):
                     elif command == 'register':
                         peer_id = self.register_peer()
                         client_connection.sendall(peer_id)
+                    elif command == 'destroy':
+                        peer_id = req['peer']
+                        self.destroy_peer(peer_id)    
                     else:    
                         pass   
 
             except KeyboardInterrupt:
+                infinite = 0
                 print '*'*78
                 print '\nKeyboard Interrupt Caught.!'
                 print 'Shutting Down Peer Server..!!!'
@@ -130,13 +141,13 @@ class central_server_class(threading.Thread):
     def close(self):
         self.server.close()
         
-    def run(self):
+    def run_(self):
         self.process_request()
 
 if __name__ == '__main__':
     try:
         cs = central_server_class()
-        cs.start()
+        cs.run_()
 
     except KeyboardInterrupt:
         print '*'*78
