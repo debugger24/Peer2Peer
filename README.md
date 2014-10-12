@@ -28,7 +28,7 @@ There are two main components in the packege:
 	
 Peer has three sub components components:
 
-1. 	Peer (peer.py)
+1) 	Peer (peer.py)
 - Serves as client for users using the peer.
 - Gives option for Listing and Searching files from the Central Indexing Server.
 - Initiates connection to Central server and registers to the network.
@@ -36,12 +36,12 @@ Peer has three sub components components:
 - Starts the file system handler, which updates Central Server about the files it has.
 - Initates file transfer upon client request.
 
-2.  File System EventHandler (FilesystemEventHandler.py)
+2)  File System EventHandler (FilesystemEventHandler.py)
 - This is a daemon thread that is spawned by the peer thread.
 - This constantly monitors the allocated directory for file updates (Addtion and Deletion).
 - Upon any such event, it automatically updates the changes to the Central Indexing server.
 
-3. 	Peer Server	(server.py)
+3) 	Peer Server	(server.py)
 - This is also a daemon server, this runs on the port which the Central Server allocates.
 - This will listen to any peer requests and initiates file transfer.
 			
