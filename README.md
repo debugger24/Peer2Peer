@@ -55,18 +55,18 @@ Peer has three sub components components:
 
 Steps to start the file transfer process:
 
-1) Start the Central Indexing Server.
+1. Start the Central Indexing Server.
 
    > python indexing_server.py
 
-2) Depending on the requirement, open n number of terminals (here n = 3).
-3) Depending on the number of peers, go into the peer(x) directory using terminal (x = 1,2,3).
-4) Place all the initial files into the 'Files' directory.
-5) Launch peers inside the peer directory.
+2. Depending on the requirement, open n number of terminals (here n = 3).
+3. Depending on the number of peers, go into the peer(x) directory using terminal (x = 1,2,3).
+4. Place all the initial files into the 'Files' directory.
+5. Launch peers inside the peer directory.
  
    > python peer.py
 
-6) Follow the promts in the terminal.
+6. Follow the promts in the terminal.
 
 *******************************************************************************************************
 
