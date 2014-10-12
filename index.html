@@ -1,0 +1,145 @@
+<!doctype html>
+<html>
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="chrome=1">
+    <title>Peer2peer by mmadhavan</title>
+    <link rel="stylesheet" href="stylesheets/styles.css">
+    <link rel="stylesheet" href="stylesheets/pygment_trac.css">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.7.1/jquery.min.js"></script>
+    <script src="javascripts/respond.js"></script>
+    <!--[if lt IE 9]>
+      <script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script>
+    <![endif]-->
+    <!--[if lt IE 8]>
+    <link rel="stylesheet" href="stylesheets/ie.css">
+    <![endif]-->
+    <meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no">
+
+  </head>
+  <body>
+      <div id="header">
+        <nav>
+          <li class="fork"><a href="https://github.com/mmadhavan/Peer2Peer">View On GitHub</a></li>
+          <li class="downloads"><a href="https://github.com/mmadhavan/Peer2Peer/zipball/master">ZIP</a></li>
+          <li class="downloads"><a href="https://github.com/mmadhavan/Peer2Peer/tarball/master">TAR</a></li>
+          <li class="title">DOWNLOADS</li>
+        </nav>
+      </div><!-- end header -->
+
+    <div class="wrapper">
+
+      <section>
+        <div id="title">
+          <h1>Peer2peer</h1>
+          <p>This is a peer to peer application like bit Napster (Written in Python)</p>
+          <hr>
+          <span class="credits left">Project maintained by <a href="https://github.com/mmadhavan">mmadhavan</a></span>
+          <span class="credits right">Hosted on GitHub Pages &mdash; Theme by <a href="https://twitter.com/michigangraham">mattgraham</a></span>
+        </div>
+
+        <h1>
+<a name="centralised-peer-to-peer-system" class="anchor" href="#centralised-peer-to-peer-system"><span class="octicon octicon-link"></span></a>Centralised Peer to Peer System</h1>
+
+<p><strong>Requirements:</strong></p>
+
+<ul>
+<li>Linux system with python installed.</li>
+<li>Python version should be equal or greater than 2.6.</li>
+<li>You can check this just be typing python in the terminal (assuming python is already installed).</li>
+</ul>
+
+<p><em>Note:</em> Please refer to the design document for detailed explaination of the architecture.</p>
+
+<hr>
+
+<p><strong>Package:</strong></p>
+
+<p>There are two main components in the packege:</p>
+
+<ol>
+<li>Indexing Server (indexing_server.py)</li>
+<li>Peer (peer)</li>
+</ol>
+
+<p><em>Indexing Server:</em></p>
+
+<ul>
+<li>Manages peer registration.</li>
+<li>Manages file index.</li>
+<li>Manages Client requests for searching index.</li>
+<li>Manages Peer list in the network that are connected to the server.</li>
+</ul>
+
+<p><em>Peer:</em></p>
+
+<p>Peer has three sub components components:</p>
+
+<p>1)  Peer (peer.py)</p>
+
+<ul>
+<li>Serves as client for users using the peer.</li>
+<li>Gives option for Listing and Searching files from the Central Indexing Server.</li>
+<li>Initiates connection to Central server and registers to the network.</li>
+<li>Starts the peer server which will serve other peers (This is Daemonized).</li>
+<li>Starts the file system handler, which updates Central Server about the files it has.</li>
+<li>Initates file transfer upon client request.</li>
+</ul>
+
+<p>2)  File System EventHandler (FilesystemEventHandler.py)</p>
+
+<ul>
+<li>This is a daemon thread that is spawned by the peer thread.</li>
+<li>This constantly monitors the allocated directory for file updates (Addtion and Deletion).</li>
+<li>Upon any such event, it automatically updates the changes to the Central Indexing server.</li>
+</ul>
+
+<p>3)  Peer Server (server.py)</p>
+
+<ul>
+<li>This is also a daemon server, this runs on the port which the Central Server allocates.</li>
+<li>This will listen to any peer requests and initiates file transfer.</li>
+</ul>
+
+<hr>
+
+<p><em>Note:</em> The 'Files' folder inside directory is used as the input and outpu directory for file transfer. 
+      So, please use this directory to place your test files.                                         </p>
+
+<hr>
+
+<h1></h1>
+
+<p><strong>Usage:</strong></p>
+
+<p>Steps to start the file transfer process:</p>
+
+<ol>
+<li>
+<p>Start the Central Indexing Server.</p>
+
+<blockquote>
+<p>python indexing_server.py</p>
+</blockquote>
+</li>
+<li><p>Depending on the requirement, open n number of terminals (here n = 3).</p></li>
+<li>Depending on the number of peers, go into the peer(x) directory using terminal (x = 1,2,3).</li>
+<li>Place all the initial files into the 'Files' directory.</li>
+<li>
+<p>Launch peers inside the peer directory.</p>
+
+<blockquote>
+<p>python peer.py</p>
+</blockquote>
+</li>
+<li><p>Follow the promts in the terminal.</p></li>
+</ol>
+
+<hr>
+      </section>
+
+    </div>
+    <!--[if !IE]><script>fixScale(document);</script><![endif]-->
+    
+  </body>
+</html>
