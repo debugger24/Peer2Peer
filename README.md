@@ -1,15 +1,14 @@
 Peer2Peer
 =======================================================================================================
-Requirements:
+**Requirements:**
 
-## Linux system with python installed.
-## Python version should be equal or greater than 2.6.
-## You can check this just be typing python in the terminal (assuming python is already installed).
+-Linux system with python installed.
+-Python version should be equal or greater than 2.6.
+-You can check this just be typing python in the terminal (assuming python is already installed).
 
 Note: Please refer to the design document for detailed explaination of the architecture.
 
-=======================================================================================================
-Package:
+**Package:**
 
 There are two main components in the packege:
 
@@ -18,14 +17,14 @@ There are two main components in the packege:
 
 Indexing Server:
 
-	## Manages peer registration.
-	## Manages file index.
-	## Manages Client requests for searching index.
-	## Manages Peer list in the network that are connected to the server.
+- Manages peer registration.
+- Manages file index.
+- Manages Client requests for searching index.
+- Manages Peer list in the network that are connected to the server.
 
 Peer:
 	
-	## Peer has three sub components components:
+	Peer has three sub components components:
 
 		1) 	Peer (peer.py)
 			# Serves as client for users using the peer.
@@ -45,13 +44,14 @@ Peer:
 			# This will listen to any peer requests and initiates file transfer.
 			
 *******************************************************************************************************
-Note: The 'Files' folder inside directory is used as the input and outpu directory for file transfer. *
-      So, please use this directory to place your test files.                                         *
+Note: The 'Files' folder inside directory is used as the input and outpu directory for file transfer. 
+      So, please use this directory to place your test files.                                         
 *******************************************************************************************************
      
 
 =======================================================================================================
-Usage:
+**Usage:**
+
 
 Steps to start the file transfer process:
 
@@ -67,7 +67,9 @@ Steps to start the file transfer process:
    > python peer.py
 
 6) Follow the promts in the terminal.
-=======================================================================================================
+
+*******************************************************************************************************
+
 
 
     
