@@ -2,9 +2,9 @@ Peer2Peer
 =======================================================================================================
 **Requirements:**
 
--Linux system with python installed.
--Python version should be equal or greater than 2.6.
--You can check this just be typing python in the terminal (assuming python is already installed).
+- Linux system with python installed.
+- Python version should be equal or greater than 2.6.
+- You can check this just be typing python in the terminal (assuming python is already installed).
 
 Note: Please refer to the design document for detailed explaination of the architecture.
 
@@ -15,36 +15,36 @@ There are two main components in the packege:
 1) Indexing Server (indexing_server.py)
 2) Peer (peer)
 
-Indexing Server:
+*Indexing Server:*
 
 - Manages peer registration.
 - Manages file index.
 - Manages Client requests for searching index.
 - Manages Peer list in the network that are connected to the server.
 
-Peer:
+*Peer:*
 	
-	Peer has three sub components components:
+Peer has three sub components components:
 
-		1) 	Peer (peer.py)
-			# Serves as client for users using the peer.
-			# Gives option for Listing and Searching files from the Central Indexing Server.
-			# Initiates connection to Central server and registers to the network.
-			# Starts the peer server which will serve other peers (This is Daemonized).
-			# Starts the file system handler, which updates Central Server about the files it has.
-			# Initates file transfer upon client request.
+1) 	Peer (peer.py)
+- Serves as client for users using the peer.
+- Gives option for Listing and Searching files from the Central Indexing Server.
+- Initiates connection to Central server and registers to the network.
+- Starts the peer server which will serve other peers (This is Daemonized).
+- Starts the file system handler, which updates Central Server about the files it has.
+- Initates file transfer upon client request.
 
-		2)  File System EventHandler (FilesystemEventHandler.py)
-			# This is a daemon thread that is spawned by the peer thread.
-			# This constantly monitors the allocated directory for file updates (Addtion and Deletion).
-			# Upon any such event, it automatically updates the changes to the Central Indexing server.
+2)  File System EventHandler (FilesystemEventHandler.py)
+- This is a daemon thread that is spawned by the peer thread.
+- This constantly monitors the allocated directory for file updates (Addtion and Deletion).
+- Upon any such event, it automatically updates the changes to the Central Indexing server.
 
-		3) 	Peer Server	(server.py)
-			# This is also a daemon server, this runs on the port which the Central Server allocates.
-			# This will listen to any peer requests and initiates file transfer.
+3) 	Peer Server	(server.py)
+- This is also a daemon server, this runs on the port which the Central Server allocates.
+- This will listen to any peer requests and initiates file transfer.
 			
 *******************************************************************************************************
-Note: The 'Files' folder inside directory is used as the input and outpu directory for file transfer. 
+*Note:* The 'Files' folder inside directory is used as the input and outpu directory for file transfer. 
       So, please use this directory to place your test files.                                         
 *******************************************************************************************************
      
