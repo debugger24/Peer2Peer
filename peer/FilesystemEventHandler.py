@@ -32,15 +32,16 @@ class FilesystemEventHandler(threading.Thread):
 					changes_added = list(set(cur_files) - set(self.files))
 					changes_removed = list(set(self.files) - set(cur_files))
 					changes = (changes_added,changes_removed)
-					self.registry(changes,self.peer_id)
+					self.files = os.listdir(self.current_directory)
+					self.registry(changes,self.peer_id, "update")
 			else:
 				self.files = os.listdir(self.current_directory)
-				self.registry(self.files,self.peer_id)
+				self.registry(self.files,self.peer_id, "index")
 
 			time.sleep(1)
 
-	def registry(self,changes,peer_id):
-		to_send_ = {peer_id:changes,'command':'index'}
+	def registry(self,changes,peer_id,change_type):
+		to_send_ = {peer_id:changes,'command':'index','change_type':change_type}
 		to_send = json.dumps(to_send_)
 		try:
 			self.connection = socket.socket(socket.AF_INET,socket.SOCK_STREAM)

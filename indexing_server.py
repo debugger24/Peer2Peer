@@ -36,10 +36,10 @@ class central_server_class():
 
     def index(self,request):
         for i,v in request.items():
-            if i == 'command':
+            if i == 'command' or i == 'change_type':
                 pass
             else:
-                if type(v) == list:
+                if request['change_type'] == 'index':
                     for sub_f in v:
                         sub_f = sub_f.lower()
                         if sub_f in self.file_index.keys():
@@ -48,9 +48,11 @@ class central_server_class():
                             self.file_index[sub_f] = []
                             self.file_index[sub_f].append(i)
 
-                elif type(v) == tuple:
+                if request['change_type'] == 'update':
                     files_added = v[0]
                     files_deleted = v[1]
+
+                    # Add new file to index
                     if len(files_added) != 0:
                         for subs in files_added:
                             subs = subs.lower()
@@ -58,7 +60,9 @@ class central_server_class():
                                 self.file_index[subs].append(i)
                             else:
                                 self.file_index[subs] = []
-                                self.file_index[subs].append(i)      
+                                self.file_index[subs].append(i)
+
+                    # Delete file from index
                     if len(files_deleted) != 0:
                         for subs_ in files_deleted:
                             subs_ = subs_.lower()
